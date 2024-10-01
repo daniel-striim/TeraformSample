@@ -1,0 +1,12 @@
+---
+
+# ---
+# Configure Striim platform
+# ---
+
+- name: Configure Striim
+  hosts: all
+  become: yes
+  become_user: striim
+  roles:
+    - configure-striim

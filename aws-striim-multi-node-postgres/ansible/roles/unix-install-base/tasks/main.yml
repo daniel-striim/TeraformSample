@@ -1,0 +1,20 @@
+- name: Run the equivalent of "apt-get update" as a separate step
+  apt:
+    update_cache: yes
+
+- name: Install packages for unix environment
+  apt:
+    name:
+      - python3-pip
+      - libpq-dev
+      #- python-dev
+      - wget
+      - postgresql
+      - openjdk-8-jdk
+      - git
+      - unzip
+    state: present
+
+- name: Install psycopg2
+  ansible.builtin.pip:
+    name: psycopg2

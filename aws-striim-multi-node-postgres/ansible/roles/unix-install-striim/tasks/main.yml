@@ -1,0 +1,14 @@
+- name: Download Latest Striim Node
+  get_url:
+    url: "{{ STRIIM_DEB_URL }}"
+    dest: /tmp/striim-node.deb
+
+- name: installing striim-node
+  become: yes
+  apt: 
+    deb: /tmp/striim-node.deb
+
+- name: Cleanup - Remove Installation files - striim-node
+  ansible.builtin.file:
+    path: /tmp/striim-node.deb
+    state: absent

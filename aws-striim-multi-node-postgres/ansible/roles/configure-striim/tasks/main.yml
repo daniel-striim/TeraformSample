@@ -1,0 +1,112 @@
+- name: Run sksConfig.sh with Arguments
+  command: "sh /opt/striim/bin/sksConfig.sh -k {{ KEY_STORE_PASS }} -s {{ SYS_PASS }} -a {{ ADMIN_PASS }} -t {{ METADATA_DB_ENGINE }} -p {{ METADATA_DB_PASS }}"
+
+- name: Change file ownership, group for sks.jks
+  ansible.builtin.file:
+    path: /opt/striim/conf/sks.jks
+    owner: striim
+    group: striim
+    mode: '0644'
+
+- name: Change file ownership, group for sksKey.pwd
+  ansible.builtin.file:
+    path: /opt/striim/conf/sksKey.pwd
+    owner: striim
+    group: striim
+    mode: '0644'
+
+- name: Change file ownership, group for striim.command.log
+  ansible.builtin.file:
+    path: /opt/striim/logs/striim.command.log
+    owner: striim
+    group: striim
+    mode: '0644'
+
+- name: Change file ownership, group for striim.server.log
+  ansible.builtin.file:
+    path: /opt/striim/logs/striim.server.log
+    owner: striim
+    group: striim
+    mode: '0644'
+
+- name: Copy startup.properties files
+  ansible.builtin.copy:
+    src: files/startUp.properties
+    dest: /opt/striim/conf/startUp.properties
+    owner: striim
+    group: striim
+    mode: '0644'
+
+## Basic Fields
+
+- name: Add WAClusterName to startup.properties
+  lineinfile:
+    path: /opt/striim/conf/startUp.properties
+    line: WAClusterName={{ CLUSTER_NAME }}
+    insertafter: '## Basic Fields' 
+
+- name: Add CompanyName to startup.properties
+  lineinfile:
+    path: /opt/striim/conf/startUp.properties
+    line: CompanyName={{ COMPANY_NAME }}
+    insertafter: '## Basic Fields'
+
+## Licence Fields
+
+- name: Add Licence Key to startup.properties
+  lineinfile:
+    path: /opt/striim/conf/startUp.properties
+    line: LicenceKey={{ LICENCE_KEY }}
+    insertafter: '## Licence Fields' 
+
+- name: Add Product Key to startup.properties
+  lineinfile:
+    path: /opt/striim/conf/startUp.properties
+    line: ProductKey={{ PRODUCT_KEY }}
+    insertafter: '## Licence Fields' 
+
+## MDR Fields
+
+- name: Add MDR IP to startup.properties
+  lineinfile:
+    path: /opt/striim/conf/startUp.properties
+    line: MetaDataRepositoryLocation={{ METADATA_IP }}:5432/striim
+    insertafter: '## MDR fields' 
+
+- name: Add MDR Engine Type to startup.properties
+  lineinfile:
+    path: /opt/striim/conf/startUp.properties
+    line: MetadataDb={{ METADATA_DB_ENGINE }}
+    insertafter: '## MDR fields' 
+
+- name: Add MDR DB Name to startup.properties
+  lineinfile:
+    path: /opt/striim/conf/startUp.properties
+    line: MetaDataRepositoryDBname={{ METADATA_DB_NAME }}
+    insertafter: '## MDR fields' 
+
+- name: Add MDR DB Username to startup.properties
+  lineinfile:
+    path: /opt/striim/conf/startUp.properties
+    line: MetaDataRepositoryUname={{ METADATA_DB_USER }}
+    insertafter: '## MDR fields' 
+
+## Interface Fields
+
+- name: Add MDR IP to startup.properties
+  lineinfile:
+    path: /opt/striim/conf/startUp.properties
+    line: IsTcpIpCluster=true
+    insertafter: '## Default interface will be local ip'
+
+- name: Add Server IPs to startup.properties
+  lineinfile:
+    path: /opt/striim/conf/startUp.properties
+    line: ServerNodeAddress={{ SERVER_NODE_IPS }}
+    insertafter: '## Default interface will be local ip'
+
+- name: Add ClusterQuorumSize to startup.properties
+  lineinfile:
+    path: /opt/striim/conf/startUp.properties
+    line: ClusterQuorumSize={{ QUORUM_SIZE }}
+    insertafter: '## Default interface will be local ip'

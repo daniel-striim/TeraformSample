@@ -1,0 +1,21 @@
+---
+
+# ---
+# Install software dependencies and other packages
+# ---
+
+- name: install dependencies
+  hosts: all
+  become: yes
+  roles:
+    - unix-install-base
+
+# ---
+# Install striim node, striim dmbs, copies startup.properties file
+# ---
+
+- name: install striim
+  hosts: all 
+  become: yes
+  roles:
+    - unix-install-striim

@@ -1,0 +1,24 @@
+- name: Create Striim Database
+  postgresql_db:
+    login_host: "{{ METADATA_IP }}"
+    login_password: "{{ METADATA_DB_PASS }}"
+    login_user: "{{ METADATA_DB_USER }}"
+    name: "{{ METADATA_DB_NAME }}"
+
+- name: Create Striim Schema
+  postgresql_schema:
+    login_host: "{{ METADATA_IP }}"
+    login_password: "{{ METADATA_DB_PASS }}"
+    login_user: "{{ METADATA_DB_USER }}"
+    database: "{{ METADATA_DB_NAME }}"
+    owner: "{{ METADATA_DB_USER }}"
+    name: "{{ METADATA_DB_SCHEMA }}"
+
+- name: Set search Path for database user
+  shell: "PGPASSWORD={{ METADATA_DB_PASS}} psql -h {{ METADATA_IP }} -U {{ METADATA_DB_USER }} {{ METADATA_DB_NAME }} -c 'ALTER ROLE {{ METADATA_DB_USER }} SET SEARCH_PATH TO {{ METADATA_DB_SCHEMA }};'"
+
+- name: Run DefineMeteringReposPostgres.sql
+  shell: "PGPASSWORD={{ METADATA_DB_PASS}} psql -h {{ METADATA_IP }} -U {{ METADATA_DB_USER }} {{ METADATA_DB_NAME }} -f /opt/striim/conf/DefineMeteringReposPostgres.sql" 
+
+- name: Run DefineMetadataReposPostgres.sql
+  shell: "PGPASSWORD={{ METADATA_DB_PASS}} psql -h {{ METADATA_IP }} -U {{ METADATA_DB_USER }} {{ METADATA_DB_NAME }} -f /opt/striim/conf/DefineMetadataReposPostgres.sql" 

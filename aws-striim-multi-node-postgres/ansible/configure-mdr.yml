@@ -1,0 +1,12 @@
+---
+
+## ---
+## Conigure Striim's metadata Repository (Postgres)
+## ---
+
+ - name: Configure MDR
+   hosts: all
+   become: yes
+   roles:
+     - configure-mdr
+
